@@ -8,8 +8,8 @@ This driver is a wrapper around the [`numat-alicat`]https://github.com/numat/ali
 ### Capabilities
 - `constant_pressure` for pressure controllers 
 - `constant_flow` for (mass) flow controllers 
--  `gaz recognition` (coming soon)
-- `mixing gaz`(coming soon)
+-  `gaz_id` (coming soon)
+- `mix_gaz`(coming soon)
 
 
 ### Attributes
