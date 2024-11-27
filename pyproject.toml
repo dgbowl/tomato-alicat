@@ -3,66 +3,43 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
+dynamic = ["version"]
 name = "tomato-alicat"
-version = "0.1.0"
-description = "Package dedicated to alicat devices for tomato."
-readme = "README.md"
-requires-python = ">=3.8"
-
 authors = [
-    {Kraus Peter , peter.kraus@ceramics.tu-berlin.de,
-    Gbocho Alexandre , gbocho@tu-berlin.de }]
+  {name="Alexandre Gbocho", email="gbocho@tu-berlin.de"},
+  {name="Peter Kraus", email="peter.kraus@ceramics.tu-berlin.de"},
+]
+
+description = "This package is a part of tomato. It has been made for the automation of alicat devices."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "alicat,
+    "tomato >= 1.0rc1",
+]
 
 keywords = ["automation", "package", "alicat", "tomato"]
-license = { GNU General Public License v3.0  }
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License"
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
 ]
-
 dependencies = [
-    "aioconsole==0.8.1",
-    "alicat==0.6.2",
-    "annotated-types==0.7.0",
-    "appdirs==1.4.4",
-    "attrs==23.2.0",
-    "babel==2.16.0",
-    "backcall==0.2.0",
-    "beautifulsoup4==4.12.3",
-    "black==24.8.0",
-    "bleach==6.1.0",
-    "bronkhorst-propar==1.1.1",
-    "certifi==2024.6.2",
-    "charset-normalizer==3.3.2",
-    "click==8.1.7",
-    "defusedxml==0.7.1",
-    "docopt==0.6.2",
-    "et-xmlfile==1.1.0",
-    "fastjsonschema==2.20.0",
-    "flexcache==0.3",
-    "flexparser==0.3.1",
-    "h5netcdf==1.3.0",
-    "h5py==3.11.0",
-    "idna==3.7",
-    "iniconfig==2.0.0",
-    "ipykernel",
-    "ipython==8.12.3",
-    "Jinja2==3.1.4",
-    "jsonschema==4.23.0",
-    "jsonschema-specifications==2023.12.1",
-    "jupyterlab_pygments==0.3.0",
-    "MarkupSafe==2.1.5",
-    "mistune==3.0.2",
-    "mypy-extensions==1.0.0",
-    "nbclient==0.10.0",
-    "nbconvert==7.16.4",
-    "nbformat==5.10.4",
-    "numpy==1.26.4",
-    "openpyxl==3.0.10",
-    "packaging==24.1",
-    "pandas==2.2.2",
-    "pandocfilters==1.5.1",
-]
+    "alicat>=0.6.2", ]
 
 [project.optional-dependencies]
-dev = [# 'pytest', # 'black' ]
+testing = ["pytest"]
+
+[project.urls]
+Repository = "https://github.com/dgbowl/tomato-alicat"
+
+
+[tool.setuptools-git-versioning]
+enabled = true
+dev_template = "{tag}.dev{ccount}"
+dirty_template = "{tag}.dev{ccount}"
+
