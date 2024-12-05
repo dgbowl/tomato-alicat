@@ -1,35 +1,31 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools", "setuptools-git-versioning"]
 build-backend = "setuptools.build_meta"
 
 [project]
-dynamic = ["version"]
 name = "tomato-alicat"
+dynamic = ["version"]
 authors = [
-  {name="Alexandre Gbocho", email="gbocho@tu-berlin.de"},
-  {name="Peter Kraus", email="peter.kraus@ceramics.tu-berlin.de"},
+  {name = "Alexandre Gbocho", email = "gbocho@tu-berlin.de"},
+  {name = "Peter Kraus", email = "peter.kraus@ceramics.tu-berlin.de"}
 ]
-
 description = "This package is a part of tomato. It has been made for the automation of alicat devices."
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "alicat,
-    "tomato >= 1.0rc1",
+  "alicat >=0.6.2",
+  "tomato >= 1.0", "serial",
 ]
-
 keywords = ["automation", "package", "alicat", "tomato"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Operating System :: OS Independent",
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent"
 ]
-dependencies = [
-    "alicat>=0.6.2", ]
 
 [project.optional-dependencies]
 testing = ["pytest"]
@@ -37,9 +33,8 @@ testing = ["pytest"]
 [project.urls]
 Repository = "https://github.com/dgbowl/tomato-alicat"
 
-
 [tool.setuptools-git-versioning]
 enabled = true
+version_format = "{tag}"
 dev_template = "{tag}.dev{ccount}"
-dirty_template = "{tag}.dev{ccount}"
-
+dirty_template = "{tag}.dev{ccount}+dirty"
