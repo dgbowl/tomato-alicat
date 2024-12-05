@@ -9,9 +9,7 @@ This driver is a wrapper around the [`numat-alicat`]https://github.com/numat/ali
 - `constant_pressure` for pressure controllers 
 - `constant_flow` for (mass) flow controllers 
 -  `get_gas_type` for (mass) flow controllers and pressure controllers
--  `tare_pressure` 
--  `tare_volumetric_flow`
-- `mix_gaz`(coming soon)
+
 
 
 ### Attributes
