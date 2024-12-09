@@ -1,7 +1,7 @@
 # tomato-alicat
 `tomato` driver for alicat flow and pressure controllers.
 
-This driver is a wrapper around the [`numat-alicat`]https://github.com/numat/alicat library. This driver is developed by the [ConCat lab at TU Berlin](https://tu.berlin/en/concat).
+This driver is a wrapper around the [`numat/alicat`](https://github.com/numat/alicat) library. This driver is developed by the [ConCat lab at TU Berlin](https://tu.berlin/en/concat).
 
 ## Supported functions
 
