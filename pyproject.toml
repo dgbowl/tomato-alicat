@@ -14,7 +14,8 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "alicat >=0.6.2",
-  "tomato >= 1.0", "serial",
+  "tomato >= 1.0",
+  "pyserial >= 3.5"
 ]
 keywords = ["automation", "package", "alicat", "tomato"]
 classifiers = [
