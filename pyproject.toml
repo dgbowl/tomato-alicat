@@ -36,6 +36,5 @@ Repository = "https://github.com/dgbowl/tomato-alicat"
 
 [tool.setuptools-git-versioning]
 enabled = true
-version_format = "{tag}"
 dev_template = "{tag}.dev{ccount}"
 dirty_template = "{tag}.dev{ccount}+dirty"
