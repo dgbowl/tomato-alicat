@@ -5,17 +5,13 @@ This driver is a wrapper around the [`numat-alicat`]https://github.com/numat/ali
 
 ## Supported functions
 
-### Capabilities
-- `constant_pressure` for pressure controllers 
+### Capabilities 
 - `constant_flow` for (mass) flow controllers 
 -  `get_gas_type` for (mass) flow controllers and pressure controllers
 
 
-
 ### Attributes
-- `pressure` for pressure controllers
 - `flow` for flow controllers
-- `control_mode` 
 - `setpoint` for all devices, within the capacity range
 - `temperature` for all devices, if available
 
