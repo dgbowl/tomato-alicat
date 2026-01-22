@@ -179,20 +179,20 @@ class Device(ModelDevice):
         for key, props in self.attrs(**kwargs).items():
             val = self.get_attr(attr=key)
             if props.units is not None:
-                data_vars[key] = (["uts"], [val.m], {"units": val.u})
+                data_vars[key] = (["uts"], [val.m], {"units": str(val.u)})
             else:
                 data_vars[key] = (["uts"], [val])
         if self.device_type == "pressure":
             data_vars["pressure"] = (
                 ["uts"],
                 [self._fmeasure.m],
-                {"units": self._fmeasure.u},
+                {"units": str(self._fmeasure.u)},
             )
         else:
             data_vars["flow"] = (
                 ["uts"],
                 [self._fmeasure.m],
-                {"units": self._fmeasure.u},
+                {"units": str(self._fmeasure.u)},
             )
         self.last_data = xr.Dataset(
             data_vars=data_vars,
