@@ -77,11 +77,17 @@ class Device(ModelDevice):
 
     device_setpoint: int
 
+    capacity_min: pint.Quantity
+
+    capacity_max: pint.Quantity
+
     _temperature: pint.Quantity
 
     _setpoint: pint.Quantity
 
     _fmeasure: pint.Quantity
+
+    _valve_close: bool
 
     def __init__(self, driver: ModelInterface, key: tuple[str, str], **kwargs: dict):
         address, self.portid = key
@@ -116,7 +122,11 @@ class Device(ModelDevice):
         self.device_unit = UNIT_MAP[setp_unit.split()[-1]]
         logger.debug("device_unit = %s", self.device_unit)
 
-        self.last_query = 0
+        self.capacity_min = pint.Quantity(f"0 {self.device_unit}")
+        cmax = self._comm(f"{self.portid}FPF {self.device_setpoint}\r".encode())
+        self.capacity_max = pint.Quantity(f"{cmax.split()[1]} {self.device_unit}")
+
+        self._refresh()
         super().__init__(driver, key, **kwargs)
 
     def attrs(self, **kwargs) -> dict[str, Attr]:
@@ -128,6 +138,13 @@ class Device(ModelDevice):
             "setpoint": Attr(
                 type=pint.Quantity,
                 units=self.device_unit,
+                status=True,
+                rw=True,
+                minimum=self.capacity_min,
+                maximum=self.capacity_max,
+            ),
+            "valve_close": Attr(
+                type=bool,
                 status=True,
                 rw=True,
             ),
@@ -143,26 +160,22 @@ class Device(ModelDevice):
 
     @coerce_val
     def set_attr(self, attr: str, val: Any, **kwargs: dict) -> Val:
-        if isinstance(val, pint.Quantity):
+        if attr == "valve_close":
+            if val is True:
+                data = self._comm(f"{self.portid}HC\r".encode())
+            else:
+                data = self._comm(f"{self.portid}C\r".encode())
+        elif isinstance(val, pint.Quantity):
             props = self.attrs()[attr]
-            ret = self._comm(f"{self.portid}S {val.to(props.units).m}\r".encode())
+            data = self._comm(f"{self.portid}S {val.to(props.units).m}\r".encode())
         else:
-            ret = self._comm(f"{self.portid}S {val}\r".encode())
-        items = ret.split()
-        idx = 2 if self.device_type == "pressure" else 5
-        return pint.Quantity(f"{items[idx]} {self.device_unit}")
+            data = self._comm(f"{self.portid}S {val}\r".encode())
+        self._refresh(data=data)
+        return self.get_attr(attr)
 
     def get_attr(self, attr: str, **kwargs: dict) -> Val:
         if time.perf_counter() - self.last_query > QUERY_INTERVAL:
-            ret = self._comm(f"{self.portid}\r".encode())
-            items = ret.split()
-            idx = 2 if self.device_type == "pressure" else 5
-            self._setpoint = pint.Quantity(f"{items[idx]} {self.device_unit}")
-            idx = 1 if self.device_type == "pressure" else 4
-            self._fmeasure = pint.Quantity(f"{items[idx]} {self.device_unit}")
-            if "temperature" in self.attrs():
-                self._temperature = pint.Quantity(f"{items[2]} degC")
-            self.last_query = time.perf_counter()
+            self._refresh()
         if attr not in self.attrs():
             raise AttributeError(f"unknown attr: {attr!r}")
         return getattr(self, f"_{attr}")
@@ -199,6 +212,13 @@ class Device(ModelDevice):
             coords={"uts": (["uts"], [datetime.now().timestamp()])},
         )
 
+    def reset(self, **kwargs):
+        super().reset(**kwargs)
+        try:
+            self.set_attr(attr="valve_close", val=True)
+        except Exception as e:
+            logger.warning(e, exc_info=True)
+
     def _comm(self, command: bytes) -> list[str]:
         lines = []
         t0 = time.perf_counter()
@@ -216,3 +236,16 @@ class Device(ModelDevice):
         lines = [i.decode().strip() for i in lines]
         logger.debug("comm = %s", lines)
         return "\n".join(lines)
+
+    def _refresh(self, data=None):
+        if data is None:
+            data = self._comm(f"{self.portid}\r".encode())
+        items = data.split()
+        idx = 2 if self.device_type == "pressure" else 5
+        self._setpoint = pint.Quantity(f"{items[idx]} {self.device_unit}")
+        idx = 1 if self.device_type == "pressure" else 4
+        self._fmeasure = pint.Quantity(f"{items[idx]} {self.device_unit}")
+        self._valve_close = True if "HLD" in items else False
+        if "temperature" in self.attrs():
+            self._temperature = pint.Quantity(f"{items[2]} degC")
+        self.last_query = time.perf_counter()

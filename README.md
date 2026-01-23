@@ -9,12 +9,13 @@ Install the package using `pip`, e.g. `pip install tomato-alicat`. No further dr
 ## Supported functions
 
 ### Capabilities
-- `constant_flow` for (mass) flow controllers
-- `constant_pressure` for pressure controllers
+- `constant_flow` for mass flow controllers (model number starts with `MCS-`)
+- `constant_pressure` for pressure controllers (model number starts with `PC-`)
 
 ### Attributes
-- `setpoint` for all devices; no max/min checks are performed at the moment
-- `temperature` for all devices, if available
+- `setpoint` of the controller, for all devices, `pint.Quantity(float, self.device_unit)`
+- `temperature` of the controller if available, `pint.Quantity(float, "celsius")`
+- `valve_close` indicating whether the valve is shut, `bool`
 
 ## Contributors
 
